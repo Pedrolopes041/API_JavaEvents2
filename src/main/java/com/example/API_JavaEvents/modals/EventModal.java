@@ -1,14 +1,14 @@
 package com.example.API_JavaEvents.modals;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "Event")
-public class Event implements Serializable {
+public class EventModal implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,6 +27,15 @@ public class Event implements Serializable {
 
     @Column
     private Date End_date;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany
+    @JoinTable(
+            name = "Event_Guest",
+            joinColumns = @JoinColumn(name = "User_id"),
+            inverseJoinColumns = @JoinColumn(name = "Guest_id")
+    )
+    private Set<GuestModal> guests = new HashSet<>();
 
     public UUID getId() {
         return id;
@@ -66,5 +75,13 @@ public class Event implements Serializable {
 
     public void setEnd_date(Date end_date) {
         End_date = end_date;
+    }
+
+    public Set<GuestModal> getGuests() {
+        return guests;
+    }
+
+    public void setGuests(Set<GuestModal> guests) {
+        this.guests = guests;
     }
 }

@@ -1,13 +1,16 @@
 package com.example.API_JavaEvents.modals;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "Guest")
-public class Guest implements Serializable {
+public class GuestModal implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -16,6 +19,10 @@ public class Guest implements Serializable {
 
     @Column(nullable = false)
     private String Name;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(mappedBy = "guests", fetch = FetchType.LAZY)
+    private Set<EventModal> eventModals = new HashSet<>();
 
     public UUID getId() {
         return id;
